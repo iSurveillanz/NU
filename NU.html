@@ -1,0 +1,3823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nayanta University Surveillance Dashboard</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+    font-size: 18px;
+    line-height: 2;
+    color: #1f2937;
+    transition: background 0.3s ease;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #0b3c6f 0%, #1e5aa0 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(11, 60, 111, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header h1 { 
+    margin: 0;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* CONTAINER */
+.container {
+    padding: 32px 20px;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 40px 50px;
+    margin-bottom: 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: auto;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* COLORS */
+.green { color: #16a34a; font-weight: 600; }
+.red { color: #dc2626; font-weight: 600; }
+.orange { color: #ea580c; font-weight: 600; }
+.blue { color: #0b3c6f; font-weight: 600; }
+
+/* PORT BOX */
+.port-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%);
+    padding: 20px 24px;
+    border-left: 5px solid #16a34a;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 17px;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    line-height: 1.8;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table, th, td {
+    border: 1px solid #e5e7eb;
+}
+
+th {
+    background: linear-gradient(135deg, #0b3c6f 0%, #1e5aa0 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+th, td {
+    padding: 20px 20px;
+    text-align: center;
+    transition: background 0.2s ease;
+    font-size: 16px;
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+tbody td {
+    border-color: #f3f4f6;
+    border-left: none;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* FLEX */
+.flex {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.flex .card {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* SECTION TITLE */
+.section-title {
+    font-weight: 800;
+    margin-bottom: 28px;
+    font-size: 26px;
+    padding-bottom: 18px;
+    border-bottom: 3px solid #e5e7eb;
+    letter-spacing: -0.3px;
+    color: #1f2937;
+}
+
+/* HIGHLIGHT */
+.highlight-green {
+    background: linear-gradient(135deg, #bbf7d0 0%, #c8f7c5 100%);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #065f46;
+}
+
+.highlight-red {
+    background: linear-gradient(135deg, #fecaca 0%, #ffb3b3 100%);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #7f1d1d;
+}
+
+/* ── CAMERA BADGES ───────────────────── */
+.cam-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 20px;
+    text-align: center;
+    font-size: 12px;
+    margin: 4px;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    transition: all 0.2s ease;
+}
+
+.cam-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
+}
+
+.cam-ok {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+}
+
+.cam-off {
+    background: linear-gradient(135deg, #ef4444 0%, #e53935 100%);
+    color: white;
+}
+
+.cam-tag {
+    background: linear-gradient(135deg, #fef08a 0%, #fef9c3 100%);
+    color: #854d0e;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    border: 1px solid #fde047;
+}
+
+/* RULE ROWS WITH ICONS */
+.rule-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 14px;
+}
+
+.rule-row-item:last-child { border-bottom: none; }
+.rule-key { color: #6b7280; font-weight: 600; }
+.rule-key .icon { margin-right: 8px; font-size: 16px; }
+.rule-val { font-weight: 700; color: #1f2937; }
+
+/* SHIFT BOX LAYOUT */
+.shift-container {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.box {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    width: 320px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: #d1d5db;
+}
+
+.box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.box td {
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Headers */
+.header-a {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+    font-weight: 800;
+}
+
+.header-b {
+    background: linear-gradient(135deg, #f59e0b 0%, #f59e0b 100%);
+    color: white;
+    font-weight: 800;
+}
+
+.header-c {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 800;
+}
+
+.label {
+    font-weight: 700;
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: 2px 6px;
+}
+
+
+/* ALLOWED STAFF CARD GRID */
+.allowed-staff-card {
+    overflow: hidden;
+}
+
+.staff-info-line {
+    background: linear-gradient(135deg, #eff6ff 0%, #eef6ff 100%);
+    border-left: 5px solid #0b3c6f;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    color: #1e3a8a;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid rgba(11, 60, 111, 0.15);
+}
+
+.exception-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #f0f9ff 100%);
+    border-radius: 12px;
+    border-left: 5px solid #0b3c6f;
+    border: 1px solid rgba(11, 60, 111, 0.15);
+}
+
+.exception-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #dfe5ef;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f2937;
+    transition: all 0.2s ease;
+}
+
+.exception-item:hover {
+    border-color: #0b3c6f;
+    background: #f9fafb;
+    transform: translateX(2px);
+}
+
+.exception-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.staff-card {
+    appearance: none;
+    border: 2px solid #e5e7eb;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font: inherit;
+    color: inherit;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.staff-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    border-color: #0b3c6f;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+}
+
+.staff-card:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+.staff-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #e5e7eb;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.staff-card:hover img {
+    border-color: #0b3c6f;
+}
+
+.staff-chip {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    color: #0b3c6f;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+    border: 1px solid #bfdbfe;
+}
+
+.staff-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+body.dark .staff-info-line {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+    border-left-color: #60a5fa;
+    color: #bfdbfe;
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+body.dark .exception-categories {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1419 100%);
+    border-left-color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+body.dark .exception-item {
+    background: #1f2937;
+    border-color: #3a4a5a;
+    color: #e0e0e0;
+}
+
+body.dark .exception-item:hover {
+    background: #374151;
+    border-color: #60a5fa;
+}
+
+body.dark .staff-card {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+    border-color: #374151;
+    color: #e0e0e0;
+}
+
+body.dark .staff-card:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    background: linear-gradient(180deg, #1f2937 0%, #0f3a66 100%);
+}
+
+body.dark .staff-card img {
+    border-color: #4b5563;
+    background: #111;
+}
+
+body.dark .staff-card:hover img {
+    border-color: #60a5fa;
+}
+
+body.dark .staff-chip {
+    background: linear-gradient(135deg, #1e40af 0%, #1f2937 100%);
+    color: #bfdbfe;
+    border-color: #3b82f6;
+}
+
+body.dark .staff-text {
+    color: #e5e7eb;
+}
+
+/* OBSERVATION CHECKLIST */
+.checklist-section {
+    margin-bottom: 18px;
+    border-left: 5px solid #0b3c6f;
+    padding-left: 18px;
+}
+
+.checklist-section h3 {
+    margin: 0 0 10px 0;
+    color: #0b3c6f;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.checklist-section ul {
+    margin: 8px 0;
+    padding-left: 24px;
+    font-size: 14px;
+}
+
+.checklist-section li {
+    margin: 6px 0;
+    line-height: 1.6;
+}
+
+.subsection-title {
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.nested-list {
+    padding-left: 32px;
+}
+
+/* MODAL */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+    padding: 20px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 95vw;
+    height: 90vh;
+    max-width: 1400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-box img {
+    max-width: 100%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin: 16px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
+}
+
+.modal-box p {
+    margin: 16px 0 0 0;
+    font-weight: 600;
+    color: #0b3c6f;
+    line-height: 1.6;
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #9ca3af;
+    line-height: 1;
+    transition: color 0.2s ease;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #f3f4f6;
+}
+
+.modal-close:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+}
+
+/* DARK MODE MODAL */
+body.dark .modal-box {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+body.dark .modal-close {
+    color: #9ca3af;
+    background: #374151;
+}
+
+body.dark .modal-close:hover {
+    background: #4b5563;
+    color: #e5e7eb;
+}
+
+body.dark .modal-box p {
+    color: #bfdbfe;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px 12px;
+    }
+
+    .card {
+        padding: 18px;
+        margin-bottom: 16px;
+    }
+
+    .header {
+        padding: 20px 16px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .shift-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .rule-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    p {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .section-title {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+
+    .flex {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .exception-categories {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .staff-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .staff-card {
+        min-height: 230px;
+        padding: 12px;
+    }
+
+    .staff-card img {
+        width: 110px;
+        height: 110px;
+    }
+
+    .staff-chip {
+        font-size: 10px;
+        margin-top: 8px;
+    }
+
+    .staff-text {
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .modal-box {
+        width: 95vw;
+        height: 90vh;
+        padding: 24px;
+    }
+}
+
+/* DARK MODE */
+body.dark {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+    color: #e0e0e0;
+    transition: background 0.3s ease;
+}
+
+body.dark .card {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark .card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .header {
+    background: linear-gradient(135deg, #000000 0%, #0b3c6f 100%);
+    border-bottom-color: rgba(96, 165, 250, 0.2);
+}
+
+body.dark table,
+body.dark th,
+body.dark td {
+    border-color: #374151;
+}
+
+body.dark th {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #fff;
+}
+
+body.dark tbody tr:hover {
+    background: #374151;
+}
+
+body.dark .box {
+    border-color: #374151;
+    background: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .box:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-color: #4b5563;
+}
+
+body.dark .label {
+    background: #374151;
+    color: #e5e7eb;
+}
+
+body.dark .section-title {
+    color: #ffffff;
+    border-bottom-color: #374151;
+}
+
+body.dark .rule-card {
+    background: #1f1f1f;
+    border-color: #444;
+}
+
+body.dark .highlight-green {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: #a7f3d0;
+}
+
+body.dark .highlight-red {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #fecaca;
+}
+
+body.dark .highlight-orange {
+    background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+    color: #fcd34d;
+}
+
+body.dark .cam-badge {
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+body.dark .cam-ok {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+}
+
+body.dark .cam-off {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+body.dark .cam-tag {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    color: #fcd34d;
+    border-color: #b45309;
+}
+
+body.dark .rule-row-item {
+    border-bottom-color: #374151;
+}
+
+body.dark .rule-key {
+    color: #9ca3af;
+}
+
+body.dark .rule-val {
+    color: #e5e7eb;
+}
+
+body.dark .checklist-section {
+    border-left-color: #60a5fa;
+}
+
+body.dark .checklist-section h3 {
+    color: #60a5fa;
+}
+
+body.dark .subsection-title {
+    color: #e0e0e0;
+}
+
+body.dark .port-box {
+    background: linear-gradient(135deg, #0f4620 0%, #064e3b 100%);
+    border-left-color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* PREMIUM MONITORING GUIDE */
+.guide-subtitle {
+    margin: 0 0 16px 0;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.quick-guide-grid,
+.nc-card-grid,
+.alert-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.quick-guide-card,
+.nc-rule-card,
+.alert-rule-card {
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quick-guide-card:hover,
+.nc-rule-card:hover,
+.alert-rule-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    border-color: #d1d5db;
+}
+
+.guide-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f0f9ff 100%);
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.guide-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.guide-text {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.status-pill,
+.evidence-pill,
+.priority-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+.status-pill {
+    background: linear-gradient(135deg, #dcfce7 0%, #e8f5e9 100%);
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.evidence-pill {
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+    color: #92400e;
+    border: 1px solid #fde047;
+}
+
+.priority-pill {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
+.nc-rule-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.nc-rule-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #0b3c6f 0%, #1e5aa0 100%);
+}
+
+.nc-title,
+.alert-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1f2937;
+    line-height: 1.4;
+    padding-left: 4px;
+}
+
+.nc-desc,
+.alert-desc {
+    margin-top: 8px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+    padding-left: 4px;
+}
+
+.alert-rule-card {
+    border-left: 4px solid #f97316;
+}
+
+.alert-rule-card.danger {
+    border-left-color: #7c3aed;
+}
+
+.alert-rule-card.warning {
+    border-left-color: #f59e0b;
+}
+
+.alert-rule-card.info {
+    border-left-color: #3b82f6;
+}
+
+.checklist-premium {
+    display: grid;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.checklist-accordion {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: white;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.checklist-accordion:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.checklist-accordion summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    font-weight: 800;
+    color: #1f2937;
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+    transition: background 0.2s ease;
+}
+
+.checklist-accordion summary:hover {
+    background: linear-gradient(135deg, #f3f4f6 0%, #f9fafb 100%);
+}
+
+.checklist-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.checklist-accordion summary::after {
+    content: "▼";
+    font-size: 12px;
+    color: #0b3c6f;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 700;
+}
+
+.checklist-accordion[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.checklist-body {
+    padding: 16px 20px 20px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.checklist-body ul {
+    margin: 0;
+    padding-left: 24px;
+}
+
+.checklist-body li {
+    margin: 6px 0;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #374151;
+}
+
+.checklist-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+}
+
+.mini-check-card {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.mini-check-card h4 {
+    margin: 0 0 10px 0;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.guide-note-box {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #fef9e7 0%, #fef3c7 100%);
+    border-left: 5px solid #f59e0b;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.6;
+    border: 1px solid #fcd34d;
+}
+
+/* EVIDENCE POPUP BUTTON */
+.evidence-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.view-example-btn {
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0b3c6f 0%, #1e5aa0 100%);
+    color: #ffffff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11, 60, 111, 0.25);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.view-example-btn:hover {
+    background: linear-gradient(135deg, #1e5aa0 0%, #2563eb 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(11, 60, 111, 0.35);
+}
+
+.view-example-btn:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+.modal-title-text {
+    margin: 0 28px 14px 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0b3c6f;
+    line-height: 1.4;
+}
+
+#cardImg.no-image {
+    display: none;
+}
+
+body.dark .view-example-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+body.dark .view-example-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
+}
+
+body.dark .modal-title-text {
+    color: #bfdbfe;
+}
+
+body.dark .guide-subtitle {
+    color: #d1d5db;
+}
+
+body.dark .quick-guide-card,
+body.dark .nc-rule-card,
+body.dark .alert-rule-card,
+body.dark .checklist-accordion {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+    border-color: #374151;
+    color: #e0e0e0;
+}
+
+body.dark .quick-guide-card:hover,
+body.dark .nc-rule-card:hover,
+body.dark .alert-rule-card:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .guide-icon {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+}
+
+body.dark .guide-title,
+body.dark .checklist-accordion summary {
+    color: #ffffff;
+}
+
+body.dark .guide-text,
+body.dark .nc-desc,
+body.dark .alert-desc {
+    color: #d1d5db;
+}
+
+body.dark .nc-title,
+body.dark .alert-title {
+    color: #ffffff;
+}
+
+body.dark .status-pill {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    color: #a7f3d0;
+    border-color: #34d399;
+}
+
+body.dark .evidence-pill {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    color: #fcd34d;
+    border-color: #facc15;
+}
+
+body.dark .priority-pill {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #fecaca;
+    border-color: #f87171;
+}
+
+body.dark .checklist-accordion summary {
+    background: linear-gradient(135deg, #1f2937 0%, #1f2937 100%);
+}
+
+body.dark .checklist-accordion summary:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+body.dark .checklist-body {
+    color: #e0e0e0;
+    border-top-color: #374151;
+}
+
+body.dark .mini-check-card {
+    background: linear-gradient(135deg, #1f2937 0%, #1f2937 100%);
+    border-color: #374151;
+}
+
+body.dark .mini-check-card h4 {
+    color: #ff8a80;
+}
+
+body.dark .guide-note-box {
+    background: linear-gradient(135deg, #5a4a0a 0%, #3a2a00 100%);
+    color: #ffe8a3;
+    border-left-color: #facc15;
+    border-color: #f59e0b;
+}
+
+@media (max-width: 768px) {
+    .quick-guide-grid,
+    .nc-card-grid,
+    .alert-card-grid,
+    .checklist-mini-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checklist-accordion summary {
+        align-items: flex-start;
+        font-size: 13px;
+        padding: 14px 16px;
+    }
+}
+
+    /* Existing CSS (SG) */
+
+.trigger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.trigger-card {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.trigger-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    border-color: #d1d5db;
+}
+
+.trigger-number {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b3c6f 0%, #1e5aa0 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(11, 60, 111, 0.3);
+}
+
+.trigger-icon {
+    font-size: 44px;
+    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
+
+.trigger-card h4 {
+    text-align: center;
+    margin: 12px 0;
+    color: #1f2937;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+.trigger-card p {
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.priority {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 3px 8px rgba(220, 38, 38, 0.3);
+}
+
+.trigger-card.high {
+    border: 2px solid #7c3aed;
+}
+
+    /* Existing CSS (OSL) */
+
+.osl-warning {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border-left: 5px solid #7c3aed;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    border: 1px solid #e9d5ff;
+}
+
+.osl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.osl-card {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    border: 2px solid #e9d5ff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.osl-card:hover {
+    transform: translateY(-6px);
+    border-color: #7c3aed;
+    box-shadow: 0 10px 28px rgba(124, 58, 237, 0.15);
+}
+
+.osl-no {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.osl-icon {
+    font-size: 44px;
+    text-align: center;
+    margin-top: 14px;
+}
+
+.osl-card h4 {
+    text-align: center;
+    margin: 14px 0 8px 0;
+    color: #5b21b6;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+.osl-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+.osl-card small {
+    display: block;
+    margin-top: 10px;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.osl-footer {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    background: linear-gradient(135deg, #5b21b6 0%, #6d28d9 100%);
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(91, 33, 182, 0.3);
+}
+
+.osl-footer div {
+    line-height: 1.6;
+}
+
+@media(max-width: 768px) {
+    .osl-footer {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+ /* Existing CSS (!-- Two group send?) */
+
+.group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.group-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.group-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+.group-header {
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+}
+
+.security .group-header {
+    background: linear-gradient(135deg, #0b3c6f 0%, #1e5aa0 100%);
+}
+
+.osl .group-header {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.group-card ul {
+    margin: 0;
+    padding: 22px 24px;
+    list-style: none;
+}
+
+.group-card li {
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.group-card li:last-child {
+    margin-bottom: 0;
+}
+
+.group-footer {
+    padding: 16px;
+    text-align: center;
+    font-weight: 800;
+    color: #fff;
+}
+
+.green {
+    background: linear-gradient(135deg, #00A800 0%, #00A800 100%);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
+
+.purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.warning-box {
+    margin-top: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #fef9e7 0%, #fef3c7 100%);
+    border-left: 5px solid #f59e0b;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #78350f;
+    border: 1px solid #fcd34d;
+    line-height: 1.7;
+}
+
+/* Student Monitoring */
+.student-table th {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    color: #fff;
+}
+
+.student-title {
+    font-weight: 800;
+}
+
+.student-report {
+    color: #dc2626;
+    font-weight: 800;
+}
+
+/* THEME BUTTON */
+#theme-btn {
+    transition: all 0.3s ease !important;
+}
+
+#theme-btn:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: #ffffff !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Nayanta University</h1>
+
+    <button onclick="toggleDark()" id="theme-btn" style="
+        position:absolute;
+        right:20px;
+        top:50%;
+        transform:translateY(-50%);
+        display:flex;
+        align-items:center;
+        gap:8px;
+        padding:7px 14px;
+        border:1.5px solid #ffffff55;
+        border-radius:20px;
+        background:rgba(255,255,255,0.15);
+        color:white;
+        font-size:13px;
+        font-family:Arial,sans-serif;
+        cursor:pointer;
+        backdrop-filter:blur(4px);
+        transition:background 0.2s;">
+        <span id="tog-icon" style="display:inline-block;width:18px;height:10px;border-radius:5px;background:rgba(255,255,255,0.4);position:relative;transition:background 0.2s;">
+            <span id="tog-circle" style="display:block;width:8px;height:8px;border-radius:50%;background:#fff;position:absolute;top:1px;left:1px;transition:left 0.2s;"></span>
+        </span>
+        <span id="tog-label">Dark mode</span>
+    </button>
+</div>
+
+<div class="container">
+
+    <!-- REPORT RULES -->
+    <div class="card">
+        <div class="section-title">Reporting Rules</div>
+        <ul>
+            <li style="color:#097969;"><b>Whatsapp Report time:</b> 24 Hours X 7 Days</li>
+            <li class="orange"><b>Live view:</b> 24 hours</li>
+        </ul>
+    </div>
+
+    <!-- CAMERA DETAILS -->
+    <div class="card">
+        <div class="section-title">Camera Coverage</div>
+        <p><b>Total Camera Accessed:</b> <span id="totalCam" class="cam-badge cam-ok">0</span></p>
+        <p><b>NVR 1</b> <span class="cam-tag">Smart PSS</span></p>
+        <div id="NVR1"></div>
+    </div>
+
+    <!-- Restriction Rules -->
+    
+    <div class="card">
+
+    <div class="section-title">
+        📡 IP msg Status Update
+    </div>
+    
+
+    
+    <div class="port-box">
+        ⏰ If <b>no incident is reported for 4 hours</b>, send the following status update in the WhatsApp group.
+    </div>
+
+    <div id="ipMessageBox" style="
+        background:linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        border:1px solid #e5e7eb;
+        border-left:5px solid #16a34a;
+        padding:20px;
+        border-radius:12px;
+        font-size:15px;
+        line-height:1.8;
+        margin-top:18px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    ">
+
+        Dear Madam/Sir,<br><br>
+
+🕘 <b>Monitoring Time:</b> <b>____ to ____</b><br><br>
+
+📹 <b>Current Status:</b> Live view monitoring continuously<br><br>
+
+✅ <b>Updated Observation:</b> No incident detected<br><br>
+
+ℹ️ This is for your kind information.<br><br>
+
+<b>Thanks & Regards<br>
+iSurveillanz Team</b>
+
+    </div>
+
+    <div style="margin-top:20px; text-align:right;">
+
+        <button onclick="copyIPMessage()" id="ipCopyBtn"
+        style="
+            background:linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color:#fff;
+            border:none;
+            padding:12px 22px;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:14px;
+            font-weight:800;
+            box-shadow:0 4px 12px rgba(22, 163, 74, 0.3);
+            transition: all 0.3s ease;
+        "
+        onmouseover="this.style.boxShadow='0 6px 16px rgba(22, 163, 74, 0.4)'; this.style.transform='translateY(-2px)';"
+        onmouseout="this.style.boxShadow='0 4px 12px rgba(22, 163, 74, 0.3)'; this.style.transform='translateY(0)';">
+
+            📋 Copy WhatsApp Message
+
+        </button>
+
+    </div>
+
+</div>
+
+            <!-- High Alert Emergery -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🚨 Emergency Alert Protocol (Security Group)
+    </div>
+
+    <div class="port-box" style="background:linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-left:5px solid #dc2626; border: 1px solid rgba(220, 38, 38, 0.2);">
+        <b>⚠️ High Priority Incident = Send WhatsApp Alert Immediately (Within 1 Minute)</b>
+    </div>
+
+    <table class="rule-table">
+        <tr>
+            <th>Emergency</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>🔥 Fire / Smoke</td>
+            <td>📲 Send WhatsApp Alert Immediately</td>
+        </tr>
+
+        <tr>
+            <td>🚨 Theft / Fight / Unauthorized Person</td>
+            <td>📲 Send WhatsApp Alert Immediately</td>
+        </tr>
+
+        <tr>
+            <td>🚑 Medical Emergency</td>
+            <td>📲 Send WhatsApp Alert Immediately</td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+    <!-- Two group send? -->
+    
+    <div class="card">
+
+    <div class="section-title">
+        📲 WhatsApp Reporting Groups
+    </div>
+
+    <div class="guide-subtitle">
+        Select the correct WhatsApp group before sending the report.
+    </div>
+
+    <div class="group-grid">
+
+        <!-- Security -->
+        <div class="group-card security">
+
+            <div class="group-header">
+                🛡 Security Group
+            </div>
+
+            <ul>
+                <li>🔥 Fire / Smoke</li>
+                <li>🚨 Theft / Fight</li>
+                <li>🚑 Medical Emergency</li>
+                <li>⚔ Weapon</li>
+                <li>🚪 Intrusion</li>
+                <li>📷 Camera Issues</li>
+                <li>🚗 Accident</li>
+                <li>👮 Security Related Incidents</li>
+            </ul>
+
+            <div class="group-footer green">
+                ✅ Send to Security WhatsApp Group<br>
+                📷 Photos & Videos: ✅ Send Normally
+            </div>
+            <img src="images/NU32.png" style="width:500px; border:1px solid #ccc; display: block; margin: 0 auto;">
+
+        </div>
+
+        <!-- OSL -->
+        <div class="group-card osl">
+
+            <div class="group-header">
+                🟣 OSL Group (Office of Student Life)
+            </div>
+
+            <ul>
+                <li>❤️ PDA / Intimate Behaviour</li>
+                <li>👊 Ragging / Bullying</li>
+                <li>😔 Emotional Distress</li>
+                <li>📸 Privacy Violation</li>
+                <li>🚷 Restricted Floor Access</li>
+                <li>🚻 Opposite Floor Entry</li>
+            </ul>
+
+            <div class="group-footer purple">
+                🔒 Send <b>ONLY</b> to OSL Group<br>
+                🔒📷 Photos & Videos: 👁️ Send as View Once Only
+            </div>
+            <img src="images/NU33.jpeg" style="width:500px; border:1px solid #ccc; display: block; margin: 0 auto;">
+
+        </div>
+
+    </div>
+
+    <div class="warning-box">
+        ⚠ Always send the report to the correct WhatsApp group.<br>
+        🚫 Do not share OSL incidents in the Security Group.
+    </div>
+
+</div>
+
+<!-- Inappropriate Behavior -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#7c3aed">
+        🚫 Inappropriate Behavior (OSL Group)
+    </div>
+
+    <table class="rule-table student-table">
+
+        <tr>
+            <th>Situation</th>
+            <th>Action</th>
+            <th>View</th>
+        </tr>
+
+        <tr>
+            <td>
+                Aggression, sexual harassment or suspicious behavior in the lift
+            </td>
+
+            <td style="color:red;font-weight:bold;">
+                Report
+            </td>
+
+            <td>
+    <button class="view-example-btn" onclick="openCard(30)">
+        View
+    </button>
+    <button class="view-example-btn" onclick="openMessageCard('inappropriate')">
+    Copy Msg
+</button>
+</td>
+        </tr>
+
+        <tr>
+            <td>
+                Kissing, sexual activity or inappropriate touching
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+               <button class="view-example-btn" onclick="openMessageCard('inappropriate')">
+    Copy Msg
+</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3" style="text-align:center;padding:18px;">
+
+                <a href="https://workdrive.zohoexternal.in/file/y78hu144e24771fb044ebbb018bd08d819c37" target="_blank">
+
+<button style="background:#7c3aed;color:white;padding:10px 18px;border:none;border-radius:5px;font-size:16px;cursor:pointer;">
+▶ Watch Example Video
+</button>
+
+</a>
+
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- IMP Note -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🚨 IMP Note (Security Group)
+    </div>
+
+    <div style="margin-bottom:16px;">
+
+        <a href="https://workdrive.zohoexternal.in/file/er25u6f163f3f9a2c42a7b4f1df09bedc925a" target="_blank">
+
+<button style="background:#c62828;color:white;padding:10px 18px;border:none;border-radius:5px;font-size:16px;cursor:pointer;">
+▶ Watch Example Video
+</button>
+
+</a>
+
+    </div>
+
+    <div style="
+        background:linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        border:1px solid #e5e7eb;
+        border-left:5px solid #dc2626;
+        padding:20px;
+        border-radius:12px;
+        margin-bottom:16px;
+        line-height:1.8;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    ">
+
+        <b>🚨 Attention:</b> Please check the quick captured image of the suspicious activity.
+        The video footage will be shared shortly.
+
+    </div>
+
+    <button
+        onclick="copyIMPMessage()"
+        style="
+            background:linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            color:#fff;
+            border:none;
+            padding:12px 20px;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:14px;
+            font-weight:800;
+            box-shadow:0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;"
+        onmouseover="this.style.boxShadow='0 6px 16px rgba(0, 0, 0, 0.25)'; this.style.transform='translateY(-2px)';"
+        onmouseout="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.2)'; this.style.transform='translateY(0)';">
+
+        📋 Copy Message
+
+    </button>
+
+</div>
+
+<!-- OSL Infomation -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#7c3aed">
+        🟣 OSL Group Trigger Points
+    </div>
+
+    <div class="guide-subtitle">
+        Office of Student Life (OSL) – Report only in the OSL WhatsApp Group.
+    </div>
+
+    <div class="osl-warning">
+        📲 <b>Report ONLY to OSL Group</b><br>
+        🚫 Do NOT share on Security or any other WhatsApp Group.
+    </div>
+
+    <div class="osl-grid">
+
+        <div class="osl-card">
+            <div class="osl-no">1</div>
+            <div class="osl-icon">🚷</div>
+            <h4>Restricted Floor Access</h4>
+            <p><b>Trigger</b><br>
+            Non-resident entry after 11 PM</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(1)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('restrictedFloor')">
+    Copy Msg
+</button>
+                </div>
+            
+
+            <hr>
+
+            <small>✔ Verify identity & access.</small>
+        </div>
+
+        <div class="osl-card">
+            <div class="osl-no">2</div>
+            <div class="osl-icon">👊</div>
+            <h4>Ragging / Bullying</h4>
+
+            <p><b>Trigger</b><br>
+            Physical or verbal aggression.</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(2)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('raggingbullying')">
+    Copy Msg
+</button>
+                </div>
+
+            <hr>
+
+            <small>✔ Identify everyone involved.</small>
+        </div>
+
+        <div class="osl-card">
+            <div class="osl-no">3</div>
+            <div class="osl-icon">👥</div>
+            <h4>Unauthorized Gathering</h4>
+
+            <p><b>Trigger</b><br>
+            Common area gathering after hours.</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(3)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('gathering')">
+    Copy Msg
+</button>
+                </div>
+
+            <hr>
+
+            <small>✔ Verify headcount & duration.</small>
+        </div>
+
+        <div class="osl-card">
+            <div class="osl-no">4</div>
+            <div class="osl-icon">😔</div>
+            <h4>Emotional Distress</h4>
+
+            <p><b>Trigger</b><br>
+            Depression / suicidal signs.</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(4)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('emotionaldistress')">
+    Copy Msg
+</button>
+                </div>
+
+            <hr>
+
+            <small>✔ Monitor behaviour pattern.</small>
+        </div>
+
+        <div class="osl-card">
+            <div class="osl-no">5</div>
+            <div class="osl-icon">📸</div>
+            <h4>Privacy Violation</h4>
+
+            <p><b>Trigger</b><br>
+            Recording without consent.</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(5)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('Photography')">
+    Copy Msg
+</button>
+                </div>
+
+            <hr>
+
+            <small>✔ Capture evidence.</small>
+        </div>
+
+        <div class="osl-card">
+            <div class="osl-no">6</div>
+            <div class="osl-icon">🚻</div>
+            <h4>Unauthorized Floor Movement</h4>
+
+            <p><b>Trigger</b><br>
+            Staircase access to opposite-gender floor.</p>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(6)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('UnauthorizedFloorMovement')">
+    Copy Msg
+</button>
+                </div>
+
+            <hr>
+
+            <small>✔ Verify repeated violation.</small>
+        </div>
+
+    </div>
+
+    <div class="osl-footer">
+
+        <div>
+            📲 <b>WhatsApp</b><br>
+            OSL Group Only
+        </div>
+
+        <div>
+            🔒 <b>Confidential</b><br>
+            Do Not Share
+        </div>
+
+        <div>
+            📝 <b>Evidence</b><br>
+            Camera + Time
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Security Trigger Points infomation -->
+
+<div class="card">
+
+    <div class="section-title">
+        🛡 Security Trigger Points
+    </div>
+
+    <div class="guide-subtitle">
+        Verify the incident before reporting. High Priority incidents must be reported within 1 minute.
+    </div>
+
+    <div class="trigger-grid">
+
+        <!-- 1 -->
+        <div class="trigger-card">
+            <div class="trigger-number">1</div>
+            <div class="trigger-icon">🚪</div>
+            <h4>Force Open Door / Lock</h4>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(7)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('OpenDoorLock')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+            <p>✔ Check damage or forced entry marks.</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="trigger-card">
+            <div class="trigger-number">2</div>
+            <div class="trigger-icon">📷</div>
+            <h4>Camera Tampered</h4>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(8)">View Example</button>
+                    <a href="https://sheet.zohopublic.in/sheet/publishedsheet/39f444c84a0e5b96f81b0565dc14fa7414ccb6adcaa53f2ff7b2685128c77f34?type=grid" target="_blank">
+
+<button style="border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6f650b 0%, #a05d1e 100%);
+    color: #ffffff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11, 60, 111, 0.25);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);">
+Captured Narration
+</button>
+
+</a>
+                </div>
+
+            <hr>
+            
+            
+            <p>✔ Verify movement or blackout.</p>
+        </div>
+
+        <!-- 3 -->
+        <div class="trigger-card high">
+            <span class="priority">HIGH</span>
+            <div class="trigger-number">3</div>
+            <div class="trigger-icon">🏢</div>
+            <h4>Property Damage</h4>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(48)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('PropertyDamage')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+            <p>✔ Identify person & report.</p>
+        </div>
+
+        <!-- 4 -->
+        <div class="trigger-card">
+            <div class="trigger-number">4</div>
+            <div class="trigger-icon">👥</div>
+            <h4>Overcrowding</h4>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(10)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('gathering')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+            <p>✔ Observe crowd movement.</p>
+        </div>
+
+        <!-- 5 -->
+        <div class="trigger-card high">
+            <span class="priority">HIGH</span>
+            <div class="trigger-number">5</div>
+            <div class="trigger-icon">🚧</div>
+            <h4>Fence / Rear Gate Entry</h4>
+            <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(11)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('FenceRearGateEntry')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+            <p>✔ Observe route & person.</p>
+        </div>
+        
+        <!-- 6 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">6</div>
+    <div class="trigger-icon">🧍</div>
+    <h4>Person Fainting or Motionless</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(12)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('FaintingorMotionless')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Confirm condition, observe movement and send High Priority Alert.</p>
+</div>
+
+<!-- 7 -->
+<div class="trigger-card">
+    <div class="trigger-number">7</div>
+    <div class="trigger-icon">⚡</div>
+    <h4>Short Circuit / Water Leak</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(13)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('ShortCircuitWaterLeak')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Verify source visually and assess electrical/safety hazard.</p>
+</div>
+
+<!-- 8 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">8</div>
+    <div class="trigger-icon">🔥</div>
+    <h4>Smoke / Fire / Sparks</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(14)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('SmokeFireSparks')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Confirm immediately using a secondary camera.</p>
+</div>
+
+<!-- 9 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">9</div>
+    <div class="trigger-icon">🏢</div>
+    <h4>Student on Balcony Parapet</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(15)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('StudentonBalconyParapet')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Confirm posture and height. Send High Priority Alert.</p>
+</div>
+
+<!-- 10 -->
+<div class="trigger-card">
+    <div class="trigger-number">10</div>
+    <div class="trigger-icon">🕵️</div>
+    <h4>Suspicious Entrance Activity</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(16)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('SuspiciousEntranceActivity')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Capture face, identifying details and vehicle information.</p>
+</div>
+
+<!-- 11 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">11</div>
+    <div class="trigger-icon">🔐</div>
+    <h4>Locker Tampering / Theft</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(17)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('LockerTamperingTheft')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify suspect and document time.</p>
+</div>
+
+<!-- 12 -->
+<div class="trigger-card">
+    <div class="trigger-number">12</div>
+    <div class="trigger-icon">🎒</div>
+    <h4>Unattended Bag / Parcel</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(18)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('UnattendedBagParcel')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Check whether the owner returns within 10–15 minutes.</p>
+</div>
+
+<!-- 13 -->
+<div class="trigger-card">
+    <div class="trigger-number">13</div>
+    <div class="trigger-icon">🚶</div>
+    <h4>Unknown Visitor Loitering & 😷 Person entering with face covered</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(19)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('facecovered')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Verify identity and resident status.</p>
+</div>
+
+<!-- 14 -->
+<div class="trigger-card">
+    <div class="trigger-number">14</div>
+    <div class="trigger-icon">🛗</div>
+    <h4>Unauthorized Emergency Lift Use</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(20)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('UnauthorizedEmergencyLiftUse')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify person, destination floor and circumstances.</p>
+</div>
+
+<!-- 15 -->
+<div class="trigger-card">
+    <div class="trigger-number">15</div>
+    <div class="trigger-icon">🚗</div>
+    <h4>Vehicle Collision / Accident</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(21)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('VehicleCollisionAccident')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Capture vehicle plates and assess injuries.</p>
+</div>
+
+<!-- 16 -->
+<div class="trigger-card">
+    <div class="trigger-number">16</div>
+    <div class="trigger-icon">🎨</div>
+    <h4>Vandalism / Property Damage</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(22)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('VandalismPropertyDamage')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify responsible person and assess damage.</p>
+</div>
+
+<!-- 17 -->
+<div class="trigger-card">
+    <div class="trigger-number">17</div>
+    <div class="trigger-icon">🅿️</div>
+    <h4>Parking Area Loitering</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(23)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('ParkingAreaLoitering')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Check for vehicle tampering or theft.</p>
+</div>
+
+<!-- 18 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">18</div>
+    <div class="trigger-icon">👊</div>
+    <h4>Aggressive Behaviour / Fight</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(24)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('AggressiveBehaviourFight')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify involved persons and alert Security immediately.</p>
+</div>
+
+<!-- 19 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">19</div>
+    <div class="trigger-icon">🚬</div>
+    <h4>Substance Abuse on Terrace</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(25)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('SubstanceAbuseonTerrace')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Observe behaviour and capture clear identification.</p>
+</div>
+
+<!-- 20 -->
+<div class="trigger-card">
+    <div class="trigger-number">20</div>
+    <div class="trigger-icon">🐕</div>
+    <h4>Animal / Wildlife Intrusion</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(26)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('AnimalWildlifeIntrusion')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify animal type, location and threat level.</p>
+</div>
+
+<!-- 21 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">21</div>
+    <div class="trigger-icon">⚠️</div>
+    <h4>Student on Terrace Railing</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(27)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('StudentonTerraceRailing')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Confirm posture and send High Priority Alert.</p>
+</div>
+
+<!-- 22 -->
+<div class="trigger-card">
+    <div class="trigger-number">22</div>
+    <div class="trigger-icon">🪨</div>
+    <h4>Throwing Objects from Terrace</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(28)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('ThrowingObjectsfromTerrace')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Identify objects thrown and responsible person(s).</p>
+</div>
+
+<!-- 23 -->
+<div class="trigger-card high">
+    <span class="priority">HIGH</span>
+    <div class="trigger-number">23</div>
+    <div class="trigger-icon">🔪</div>
+    <h4>Weapon Possession / Use</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(29)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('WeaponPossessionUse')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Verify weapon visibility and alert Security Control Room immediately.</p>
+</div>
+
+<!-- 24 -->
+<div class="trigger-card">
+    <div class="trigger-number">24</div>
+    <div class="trigger-icon">🚗</div>
+    <h4>Vehicle parked near hostel after 10:00 PM</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(54)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('Vehicleparkednearhostel')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Verify weapon visibility and alert Security Control Room immediately.</p>
+</div>
+
+
+        <!-- Continue remaining cards -->
+
+    </div>
+
+</div>
+
+
+
+<!-- Student Monitoring -->
+
+<div class="card">
+
+    <div class="section-title student-title" style="color:#7c3aed">
+        🎓 Student Monitoring (OSL Group)
+    </div>
+
+    <table class="rule-table student-table">
+
+        <tr>
+            <th>Category</th>
+            <th>Camera No.</th>
+            <th>Rule</th>
+            <th>Time</th>
+        </tr>
+
+        <tr>
+            <td>Student Gate Monitoring</td>
+            <td>34</td>
+            <td>
+                If any student enters or exits the gate
+                <span class="student-report">→ Post Report</span>
+            </td>
+            <td>10:00 PM – 05:00 AM</td>
+        </tr>
+
+        <tr>
+            <td>Balcony Monitoring</td>
+            <td>-</td>
+            <td>
+                If any student accesses the balcony
+                <span style="
+                    background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+                    color:#fff;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    font-weight:800;
+                    font-size: 12px;">
+                    Allowed
+                </span>
+            </td>
+            <td>24 hours</td>
+        </tr>
+
+
+        <tr>
+            <td>1st & 2nd Floor (Girls Floor)</td>
+            <td>16, 17, 18, 19</td>
+            <td>
+                Monitor staircase and lobby.<br>
+                If any <b>male</b> candidate enters
+                <b>1st or 2nd Floor (Girls Floor)</b>
+                <span class="student-report">→ Post Report</span>
+            </td>
+            <td>After 11:00 PM</td>
+        </tr>
+
+        <tr>
+            <td>3rd Floor (Boys Floor)</td>
+            <td>20, 21</td>
+            <td>
+                Monitor staircase and lobby.<br>
+                If any <b>female</b> candidate enters
+                <b>3rd Floor (Boys Floor)</b>
+                <span class="student-report">→ Post Report</span>
+            </td>
+            <td>After 11:00 PM</td>
+        </tr>
+
+        <tr>
+            <td>Ground Floor</td>
+            <td>-</td>
+            <td>
+                There is <b>no time restriction</b> while students are inside the premises.
+            </td>
+            <td>After 11:00 PM</td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+   <!-- Security Guard Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🚨 Security Guard Monitoring (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Activity</th>
+            <th>Camera No.</th>
+            <th>Time</th>
+            <th>Action</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>😴 Slept</td>
+            <td>-</td>
+            <td>1 Minute</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(33)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>🗣 Talking</td>
+            <td>-</td>
+            <td>2 Minutes</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(34)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>🚬 Tobacco</td>
+            <td>-</td>
+            <td>Not Allowed</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard()">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+
+        <tr>
+            <td>🚶 Security Guard not taking round</td>
+            <td>-</td>
+            <td>15 Minutes</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(36)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>🏢 Basement & Staircases not checked</td>
+            <td>-</td>
+            <td>30 Minutes</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(37)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>🚪 Person Entry / Exit</b><br>
+                If person enters or exits gate without security guard
+            </td>
+            <td>34</td>
+            <td>-</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(38)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>👮 Security Guard Absence</b><br>
+                If guard absent then post report
+            </td>
+            <td>34</td>
+            <td>-</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(39)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>📦 Material Movement</b><br>
+                If asset moves out without security check
+            </td>
+            <td>34</td>
+            <td>-</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(40)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                If any person or worker enters without a register entry or a valid ID card, post a report.,
+                but <b>leaders are allowed to enter.</b>
+            </td>
+            <td>10, 30 and 37</td>
+            <td>-</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(41)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>👮 Security Guard Deployment</b><br>
+                1 male security guard (Day), 1 male security guard (Night)
+                and 1 female security guard (Day)
+            </td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(42)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- Basement Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🏢 Basement Monitoring (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Camera</th>
+            <th>Situation</th>
+            <th>Time</th>
+            <th>Action</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>-</td>
+            <td>
+                If any person is present in the basement between
+                <b>10:00 PM – 06:00 AM</b>, apart from the ambulance driver or
+                security guard.
+            </td>
+            <td>10:00 PM – 06:00 AM</td>
+            <td style="color:red;font-weight:bold;">Send Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+
+        <tr>
+            <td>-</td>
+            <td>
+                If the ambulance moves out of the premises.
+            </td>
+            <td>10:00 PM – 06:00 AM</td>
+            <td style="color:red;font-weight:bold;">Post Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(44)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                Vehicles or persons waiting at the gate because the security guard opened it late.
+            </td>
+            <td>Anytime</td>
+            <td style="color:red;font-weight:bold;">Post Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(45)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>-</td>
+            <td>
+                Anyone standing or peeping inside the basement gate.
+            </td>
+            <td>Anytime</td>
+            <td style="color:red;font-weight:bold;">Post Report</td>
+            <td>
+                <button class="view-example-btn" onclick="openCard(46)">View</button>
+                <button class="view-example-btn" onclick="openMessageCard('')">Copy Msg</button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- Staff Activity -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        👷 Staff Activity (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Situation</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>
+                If housekeeping sit idle for more than
+                <b>10 minutes</b>
+                <span style="color:red;font-weight:bold;"> → Post Report</span>
+            </td>
+
+            <td>
+                <button class="view-example-btn" onclick="openCard(47)">
+                    View
+                </button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- Camera No. 7 & 8 – Gate Entry -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🚪 Camera No. 7 & 8 – Gate Entry (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Situation</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>
+                People are allowed to enter the gate from
+                <b>6:00 AM to 10:00 PM</b> without a student.
+            </td>
+
+            <td>
+                <button class="view-example-btn" onclick="openCard(49)">
+                    View
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                From <b>10:00 PM to 6:00 AM</b>,
+                if anyone enters the gate
+                <span style="color:red;font-weight:bold;">→ Post Report</span>
+            </td>
+
+            <td>
+                <button class="view-example-btn" onclick="openCard(50)">
+                    View
+                </button><br><br>
+                <button class="view-example-btn" onclick="openCard(70)">
+                    View
+                </button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- Camera No. 40, 41, 48 – Lift -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🛗 Camera No. 40, 41, 48 – Lift (4th, 5th & 6th Floor) (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Situation</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>
+                Students are
+                <span style="color:red;font-weight:bold;">NOT allowed</span>
+                to use the lift or staircase.
+                Workers are allowed.
+            </td>
+
+            <td>
+                <button class="view-example-btn" onclick="openCard(51)">
+                    View
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Movement in restricted areas
+                (4th Floor, 5th Floor, Terrace, Unused Staircases)
+                <span style="color:red;font-weight:bold;">→ Report</span>
+            </td>
+
+            <td>
+                <button class="view-example-btn" onclick="openCard(52)">
+                    View
+                </button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- General Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        📋 General Monitoring (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Camera No.</th>
+            <th>Rule</th>
+            <th>Time</th>
+        </tr>
+
+        <tr>
+            <td>-</td>
+            <td>
+                If anyone is seen using
+                <b>tobacco, smoking, alcohol, or any intoxicating substance</b>
+                <span style="color:red;font-weight:bold;">→ Post Report</span>
+            </td>
+            <td>Anytime</td>
+        </tr>
+
+        <tr>
+            <td>-</td>
+            <td>
+                If any abnormal or suspicious activity is observed
+                <span style="color:red;font-weight:bold;">→ Post Report</span>
+            </td>
+            <td>10:00 PM – 05:00 AM</td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- Fire Staircase Door Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🚪 Fire Staircase Door Monitoring (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Location / Rule</th>
+            </tr>
+
+        <tr>
+            <td>
+                <b>Location:</b> Fire Staircase Door
+                <small>(Example: 3rd Floor Fire Staircase)</small><br>
+                <img src="images/Photo3.jpeg" style="width:200px; border:1px solid #ccc;">
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>
+                If a <b>general person</b> opens the staircase door and enters
+                between <b>10:00 PM – 05:00 AM</b>
+                <span style="color:red;font-weight:bold;">
+                    → Send Report
+                </span>
+            </td>
+
+            
+        </tr>
+
+        <tr>
+            <td>
+                If the <b>security guard</b> opens the staircase door between
+                <b>10:00 PM – 05:00 AM</b>
+                <span style="
+                    background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+                    color:#fff;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    font-weight:800;
+                    font-size: 12px;">
+                    Allowed
+                </span>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>
+                <b>Note:</b> Auditors should verify whether the person is a
+                <b>security guard</b> before reporting.
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- Outdoor Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🌳 Outdoor Monitoring (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Rule</th>
+            <th>View Photo/Video</th>
+        </tr>
+
+        <tr>
+            <td>
+                Suspicious activity near the building boundary or
+                an attempt to enter the premises
+                <span style="color:red;font-weight:bold;">
+                    → Report
+                </span>
+                <td>
+                <button class="view-example-btn" onclick="openCard(53)">
+                    View
+                </button>
+            </td>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Any staff / student / worker outside the building between
+                <b>10:00 PM – 06:00 AM</b>
+                <span style="color:red;font-weight:bold;">
+                    → Report
+                </span>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- Staircase Monitoring -->
+
+<div class="card">
+
+    <div class="section-title" style="color:#0d4075">
+        🪜 Staircase Monitoring – Backside (Security Group)
+    </div>
+
+    <table class="rule-table">
+
+        <tr>
+            <th>Rule</th>
+        </tr>
+
+        <tr>
+            <td>
+                Any movement from the staircase into the floors
+                <span style="color:red;font-weight:bold;">
+                    → Report
+                </span>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>
+                Movement in the staircase between
+                <b>10:00 PM – 06:00 AM</b>
+                <span style="color:red;font-weight:bold;">
+                    → Report
+                </span>
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+
+    <!-- Allowed Staff -->
+    <div class="card allowed-staff-card">
+        <div class="section-title" style="color:#0d4075">Ambulance Driver (Allowed Person) (Security Group)</div> 
+        <div class="staff-info-line">
+            Ambulance driver sleeping in the basement area is ALLOWED. Do not send a report if this person is seen resting.
+        </div>
+
+        <!-- STAFF CARDS -->
+        <div class="staff-grid">
+            <!-- ORIGINAL STAFF -->
+            <button class="staff-card" onclick="openStaffCard('images/Photo1.png', 'Allowed Staff', 'Allowed for photograph and mobile. No report required for this approved exception.')">
+                <img src="images/Photo1.png" alt="Staff 2">
+                <span class="staff-chip">-</span>
+                <span class="staff-text">Ambulance Driver - Reference Photo</span>
+            </button>
+
+            <button class="staff-card" onclick="openStaffCard('images/Photo2.png', 'Admin Exception', 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.')">
+                <img src="images/Photo2.png" alt="Admin">
+                <span class="staff-chip">-</span>
+                <span class="staff-text">Ambulance Driver - Night Camera View</span>
+            </button>
+        </div>
+    </div>
+
+    
+
+<!-- end .container -->
+
+<!-- MODAL (for openCard) -->
+<div class="modal-overlay" id="cardModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeCard()" title="Close">&times;</button>
+        <h3 id="cardTitle" class="modal-title-text">Preview</h3>
+        <img id="cardImg" src="" alt="Card image">
+        <p id="cardText"></p>
+    </div>
+</div>
+
+<!-- MODAL (for message templates) -->
+<div class="modal-overlay" id="messageModal">
+    <div class="modal-box" style="height:auto; max-width:1000px;">
+        <button class="modal-close" onclick="closeMessageModal()" title="Close">&times;</button>
+        <h3 class="modal-title-text">Report Message Templates</h3>
+        <div id="messageList"></div>
+    </div>
+</div>
+
+<script>
+
+// Camera lists
+const NVR1  = Array.from({length:59}, (_,i) => i+1);
+
+// Render badges
+function render(id, list, offList=[]) {
+    let html = '';
+    list.forEach(c => {
+        const cls = offList.includes(c) ? 'cam-off' : 'cam-ok';
+        html += `<span class="cam-badge ${cls}">${c}</span>`;
+    });
+    document.getElementById(id).innerHTML = html;
+}
+
+// Total active cameras
+function updateTotal() {
+    const active =
+        (NVR1.length  - off.NVR1.length);
+    document.getElementById('totalCam').textContent = active;
+}
+
+function updateTotal() {
+    document.getElementById('totalCam').textContent = NVR1.length;
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => {
+    render('NVR1',  NVR1,  NVR1.gnd);
+    updateTotal();
+});
+
+// Dark mode toggle
+function toggleDark() {
+    const isDark = document.body.classList.toggle('dark');
+    document.getElementById('tog-label').textContent  = isDark ? 'Light mode' : 'Dark mode';
+    document.getElementById('tog-circle').style.left  = isDark ? '9px' : '1px';
+    document.getElementById('tog-icon').style.background = isDark ? '#3b82f6' : 'rgba(255,255,255,0.4)';
+}
+
+// Modal open for staff card image/evidence preview
+function openStaffCard(imageSrc, title, message) {
+    const img   = document.getElementById('cardImg');
+    const text  = document.getElementById('cardText');
+    const titleEl = document.getElementById('cardTitle');
+
+    titleEl.innerText = title || 'Preview';
+    text.innerText = message || '';
+
+    if (imageSrc) {
+        img.src = imageSrc;
+        img.alt = title || 'Preview image';
+        img.classList.remove('no-image');
+    } else {
+        img.src = '';
+        img.alt = '';
+        img.classList.add('no-image');
+    }
+
+    document.getElementById('cardModal').classList.add('open');
+}
+
+// Popup examples for Allowed Staff and Jewellery NC evidence
+function openCard(cardNumber) {
+    const cards = {
+        1: {
+            image: 'images/NU1.png',
+            title: 'Non-resident access to restricted floor area during prohibited hours (post 11 PM)',
+            message: 'Verify identity and legitimacy of access.'
+        },
+        2: {
+            image: 'images/NU2.png',
+            title: 'Ragging or bullying incident (physical/verbal aggression)',
+            message: 'Observe physical aggression or targeting behavior, identify all individuals involved.'
+        },
+        3: {
+            image: 'images/NU3.png',
+            title: 'Unauthorized assembly in common areas beyond reasonable hours or in numbers violating protocol',
+            message: 'Confirm headcount and purpose of gathering, identifyorganizers and participants, check duration and stated intent'
+        },
+        4: {
+            image: 'images/NU4.png',
+            title: 'Student showing signs of emotional distress, depression, or suicidal ideation',
+            message: 'Monitor behavior patterns over time.'
+        },
+        5: {
+            image: 'images/NU5.png',
+            title: 'Suspected recording / Photography without consent, or privacy violation attempts',
+            message: 'capture evidence without tampering.'
+        },
+        6: {
+            image: 'images/NU6.png',
+            title: 'Repeated inter-floor unauthorized movement or attempt to circumvent access control (using staircase to access opposite- gender floor)',
+            message: 'Establish pattern of violation, identify individuals and frequency, determine whether accidental or deliberate breaches'
+        },
+        7: {
+            image: 'images/NU7.png',
+            title: 'Attempt to force open doors/locks',
+            message: 'Look for visible tampering, tools, or forced entry marks'
+        },
+        8: {
+            image: 'images/NU8.png',
+            title: 'CCTV camera tampered or blocked',
+            message: 'Verify camera movement capability or confirm blackout.'
+        },
+        9: {
+            image: 'images/NU9.png',
+            title: 'Damage to property (High Priority) ',
+            message: 'Identify person(s) involved, document time and location and send High Priority Alert.'
+        },
+        10: {
+            image: 'images/NU10.png',
+            title: 'Overcrowding or panic near exits',
+            message: 'Observe crowd density, movement patterns'
+        },
+        11: {
+            image: 'images/NU11.png',
+            title: 'Person entering the Campus / Hostel via fence/rear gate/window (High Priority)',
+            message: 'Observe entry/exit route, attire, and time of intrusion'
+        },
+        12: {
+            image: 'images/NU12.png',
+            title: 'Person fainting or lying motionless (High Priority)',
+            message: 'Confirm condition, observe for movement and send High Priority Alert.'
+        },
+        13: {
+            image: 'images/NU13.png',
+            title: 'Short circuit / water leak near power area ',
+            message: 'Verify source visually, assess electrical/safety hazard'
+        },
+        14: {
+            image: 'images/NU14.png',
+            title: 'Smoke, fire, or sparks visible (High Priority)',
+            message: 'Confirm with secondary camera immediately'
+        },
+        15: {
+            image: 'images/NU15.png',
+            title: 'Student sitting on parapet or ledge of any balcony / Veranda. (High Priority)',
+            message: 'Confirm posture and height and send High Priority Alert.'
+        },
+        16: {
+            image: 'images/NU16.png',
+            title: 'Suspected unusual activity near entrance ',
+            message: 'Zoom to capture face/identifying details and vehicle information'
+        },
+        17: {
+            image: 'images/NU17.png',
+            title: 'Theft attempt or tampering with lockers (High Priority)',
+            message: 'Confirm suspicious handling, identify person, document time'
+        },
+        18: {
+            image: 'images/NU18.png',
+            title: 'Unattended bag or parcel',
+            message: 'Check if owner returns within 10-15 minutes'
+        },
+        19: {
+            image: 'images/NU19.png',
+            title: 'Unknown visitor loitering in Public Areas & 😷 Person entering with face covered',
+            message: 'Zoom for identification, verify resident status'
+        },
+        20: {
+            image: 'images/NU20.png',
+            title: 'Use of emergency lift by unauthorized persons',
+            message: 'Zoom to identify person, destination floor, and circumstances'
+        },
+        21: {
+            image: 'images/NU21.png',
+            title: 'Vehicle collision or traffic accident ',
+            message: 'Verify collision details, capture vehicle plates, assess injuries'
+        },
+        22: {
+            image: 'images/NU22.png',
+            title: 'Vandalism or defacement of facility/walls ',
+            message: 'Identify person responsible, photograph damage, assess extent'
+        },
+        23: {
+            image: 'images/NU23.png',
+            title: 'Suspicious loitering in parking area ',
+            message: 'Zoom to identify, check for vehicle tampering or theft.'
+        },
+        24: {
+            image: 'images/NU24.png',
+            title: 'Aggressive behavior or physical confrontation (High Priority)',
+            message: 'Identify person/s involved, confirm escalation of violence, alert security immediately'
+        },
+        25: {
+            image: 'images/NU25.png',
+            title: 'Substance abuse or intoxication observed on terrace (alcohol, tobacco, or controlled substances) (High Priority)',
+            message: 'Observe behavior pattern, capture clear identification'
+        },
+        26: {
+            image: 'images/NU26.png',
+            title: 'Animal intrusion or wildlife incident ',
+            message: 'Confirm animal type and location, assess threat level'
+        },
+        27: {
+            image: 'images/NU27.png',
+            title: 'Student sitting/standing on parapet, ledge, or safety railing on the Terrace (High Priority)',
+            message: 'Confirm posture and height, send High Priority Alert.'
+        },
+        28: {
+            image: 'images/NU28.png',
+            title: 'Throwing objects, water, or debris from terrace toward building or people below',
+            message: 'Identify object/s being thrown and individuals responsible'
+        },
+        29: {
+            image: 'images/NU29.png',
+            title: 'Possession, display, or suspected use of weapons (knife, firearm, sharp object, or improvised weapon) (High Priority)',
+            message: 'Zoom and verify object visibility, identify individual(s) involved, assess immediate threat, and alert Security Control Room without delay'
+        },
+        30: {
+            image: 'images/Photo11.png',
+            title: 'Aggression, sexual harassment or suspicious behavior in the lift',
+            message: ''
+        },
+        31: {
+            image: 'images/NU29.png',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        32: {
+            image: 'images/NU29.png',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        33: {
+            image: 'Security/Securityslept.png',
+            title: 'Slept - 1 mins',
+            message: ''
+        },
+        34: {
+            image: 'Security/Securitytalk2mins.png',
+            title: 'Talking - 2 mins',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        35: {
+            image: '',
+            title: '',
+            message: ''
+        },
+        36: {
+            image: 'Security/Secirutynottalkround.png',
+            title: 'Security Guard not taking round - 15 mins',
+            message: ''
+        },
+        37: {
+            image: 'Security/B&Scheck30mins.png',
+            title: 'Basement & Staircases not checked - 30 mins',
+            message: ''
+        },
+        38: {
+            image: 'Security/PersonE&Egate.png',
+            title: 'Person Entry / Exit, If person enters or exits gate without security guard',
+            message: ''
+        },
+        39: {
+            image: 'Security/Securityabsent15mins.png',
+            title: 'Security Guard Absence, If guard absent more than 15 minutes',
+            message: ''
+        },
+        40: {
+            image: 'Security/Materialmove.png',
+            title: 'Material Movement If asset moves out without security check',
+            message: ''
+        },
+        41: {
+            image: 'Security/personenterregister.png',
+            title: '',
+            message: ''
+        },
+        42: {
+            image: 'Security/securitymalefamale.png',
+            title: 'Security Guard Deployment 1 male security guard (Day), 1 male security guard (Night) and 1 female security guard (Day)',
+            message: ''
+        },
+        43: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        44: {
+            image: 'Basement/premisessecurity.png',
+            title: 'If the ambulance moves out of the premises - 10:00 PM – 06:00 AM',
+            message: ''
+        },
+        45: {
+            image: 'Basement/waitinggate.png',
+            title: 'Vehicles or persons waiting at the gate because the security guard opened it late.',
+            message: ''
+        },
+        46: {
+            image: 'Basement/standingpeeping.png',
+            title: 'Anyone standing or peeping inside the basement gate',
+            message: ''
+        },
+        47: {
+            image: 'images/Photo4.png',
+            title: 'If housekeeping sit idle for more than 10 minutes',
+            message: ''
+        },
+        48: {
+            image: 'images/Photo5.png',
+            title: 'Report any suspicious activity beyond the above points (Chaos, littering, spitting, property damage, or any other abnormal activity)',
+            message: ''
+        },
+        49: {
+            image: 'images/Photo6.png',
+            title: 'People are allowed to enter the gate from 9:00 AM to 7:00 PM without a student.',
+            message: ''
+        },
+        50: {
+            image: 'images/Photo7.png',
+            title: 'From 10:00 PM to 6:00 AM, if anyone enters the gate',
+            message: ''
+        },
+        51: {
+            image: 'images/Photo9.png',
+            title: 'Students are NOT allowed to use the lift or staircase. Workers are allowed.',
+            message: ''
+        },
+        52: {
+            image: 'images/Photo10.png',
+            title: 'Movement in restricted areas (4th Floor, 5th Floor, Terrace, Unused Staircases)',
+            message: ''
+        },
+        53: {
+            image: 'images/NU30.png',
+            title: 'Suspicious activity near the building boundary or an attempt to enter the premises',
+            message: ''
+        },
+        54: {
+            image: 'images/NU31.png',
+            title: '🚗 Vehicle parked near hostel after 10:00 PM',
+            message: ''
+        },
+        55: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        56: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        57: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        58: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        59: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        60: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        61: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        62: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        63: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        64: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        65: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        66: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        67: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        68: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        69: {
+            image: '',
+            title: 'Admin Exception',
+            message: 'Admin is allowed to talk, take photographs and use mobile. No report required for this approved exception.'
+        },
+        70: {
+            image: 'images/Photo8.png',
+            title: '',
+            message: ''
+        }
+    };
+
+    if (cards[cardNumber]) {
+        openStaffCard(cards[cardNumber].image, cards[cardNumber].title, cards[cardNumber].message);
+    }
+}
+
+// Modal close
+function closeCard() {
+    const modal = document.getElementById('cardModal');
+    const img = document.getElementById('cardImg');
+    modal.classList.remove('open');
+    img.src = '';
+}
+
+const messageSets = {
+    inappropriate: [
+        "Attention please, 1 worker did abnormal action (Kissing)",
+        "Attention please, 1 worker did abnormal action (Sexual Action)",
+        " Attention please, 1 worker did abnormal action (Inappropriate Touch)"
+    ],
+    restrictedFloor: [
+        "Please check what 1 person was doing (yellow pointer)"
+    ],
+    gathering: [
+        "Please check the reason of gathering (yellow pointer)",
+    ],
+    raggingbullying: [
+        "Please check what they were doing (yellow pointer)"
+    ],
+    emotionaldistress: [
+        "1 student sitting from ...  till now (yellow pointer / red arrowe)",
+        "1 student sat from ... to ... (.. mins) (yellow pointer / red arrowe)",
+        "Please check what they were doing (yellow pointer)"
+    ],
+    Photography: [
+        { text: "1 worker did photograph (yellow pointer / red arrow)", label: "NC: Photography" },
+        { text: "Please check what they were doing (yellow pointer / red arrow)", label: "AB: Abnormality" }
+    ],
+    UnauthorizedFloorMovement: [
+        { text: "Please verify what 1 student was doing while standing near the girls' wing room.", label: "NC: Non Conformity" }
+    ],
+    OpenDoorLock: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ]
+    ,
+    PropertyDamage: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    FenceRearGateEntry: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    FaintingorMotionless: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    ShortCircuitWaterLeak: [
+        { text: "Please check water leakage (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check for a short circuit (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    SmokeFireSparks: [
+        { text: "Attention: Please check for smoke (yellow pointer)", label: "AB: Abnormality" },
+        { text: "There was fire (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention please, There is fire (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention please, Please check the sparks. (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention please, Please check the electrical sparks. (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    StudentonBalconyParapet: [
+        { text: "Attention Please, 1 student was sitting on balcony parapet (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention Please, 1 student was sitting on a balcony ledge. (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention Please, 1 student was standing on a balcony ledge. (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    SuspiciousEntranceActivity: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    LockerTamperingTheft: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    UnattendedBagParcel: [
+        { text: "Please check the area, as an unattended bag was left without any person nearby.", label: "AB: Abnormality" }
+    ],
+    facecovered: [
+        { text: "Please check. An unknown person was loitering in the area. (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check. One person entered the premises with a covered face. (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    VehicleCollisionAccident: [
+        { text: "Attention Please, A vehicle accident was observed (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    VandalismPropertyDamage: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    ParkingAreaLoitering: [
+        { text: "", label: "AB: Abnormality" }
+    ],
+    AggressiveBehaviourFight: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    SubstanceAbuseonTerrace: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    AnimalWildlifeIntrusion: [
+        { text: "1 dog entered (red arrow / yellow pointer)", label: "AB: Abnormality" },
+        { text: "1 monkey entered (red arrow / yellow pointer)", label: "AB: Abnormality" }
+    ],
+    StudentonTerraceRailing: [
+        { text: "Attention Please, 1 student was sitting on a balcony ledge. (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Attention Please, 1 student was standing on a balcony ledge. (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    ThrowingObjectsfromTerrace: [
+        { text: "1 person threw object (yellow pointer)", label: "AB: Abnormality" },   
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    WeaponPossessionUse: [
+        { text: "Please check what 1 person was doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what ... persons were doing (yellow pointer)", label: "AB: Abnormality" },
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    Vehicleparkednearhostel: [
+        { text: ".. vehicle was parked near the hostel at ... (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    OpenDoorLoc: [
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    OpenDoorLoc: [
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    OpenDoorLoc: [
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    OpenDoorLoc: [
+        { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ]
+
+};
+
+function openMessageCard(setKey) {
+    const messages = messageSets[setKey] || [];
+    const container = document.getElementById('messageList');
+    container.dataset.setKey = setKey;
+    container.innerHTML = messages.map((msg, i) => {
+        const text = (typeof msg === 'string') ? msg : msg.text;
+        const badgeLabel = (typeof msg === 'string') ? 'AB: Abnormality' : msg.label;
+        return `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px; border:1px solid #e5e7eb; border-radius:10px; margin-bottom:12px;">
+            <span style="font-size:14px; text-align:left;">${text}</span>
+            <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+                <button class="view-example-btn" onclick="copyIncidentMessage('${setKey}', ${i}, this)">Copy</button>
+                <span style="
+                    color:#dc2626;
+                    font-weight:800;
+                    font-size:11px;
+                    background:#fee2e2;
+                    border:1px solid #fca5a5;
+                    padding:4px 10px;
+                    border-radius:20px;
+                    white-space:nowrap;">
+                    ${badgeLabel}
+                </span>
+            </div>
+        </div>`;
+    }).join('');
+    document.getElementById('messageModal').classList.add('open');
+}
+
+function copyIncidentMessage(setKey, index, btn) {
+    const msg = messageSets[setKey][index];
+    const text = (typeof msg === 'string') ? msg : msg.text;
+    navigator.clipboard.writeText(text);
+    const original = btn.innerHTML;
+    btn.innerHTML = "✅ Copied";
+    setTimeout(() => { btn.innerHTML = original; }, 1500);
+}
+
+function closeMessageModal() {
+    document.getElementById('messageModal').classList.remove('open');
+}
+
+
+    /* Paste it here */
+
+function copyIPMessage() {
+
+    const text = `Dear Madam/Sir,
+
+🕘 Monitoring Time: ______ to ______
+
+📹 Monitoring Status: Live View Monitoring in Progress
+
+✅ Observation: No abnormal incidents detected during this period.
+
+ℹ️ This is for your kind information.
+
+Regards,
+iSurveillanz Team`;
+
+    navigator.clipboard.writeText(text);
+
+    const btn = document.getElementById("ipCopyBtn");
+    btn.innerHTML = "✅ Copied!";
+    btn.style.background = "#2563eb";
+
+    setTimeout(() => {
+        btn.innerHTML = "📋 Copy WhatsApp Message";
+        btn.style.background = "linear-gradient(135deg, #16a34a 0%, #15803d 100%)";
+    }, 2000);
+}
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeMessageModal();
+    }
+});
+
+function copyIMPMessage(){
+
+const text=`🚨 Attention:
+
+Please check the quick captured image of the suspicious activity.
+
+The video footage will be shared shortly.`;
+
+navigator.clipboard.writeText(text);
+
+alert("Message Copied Successfully.");
+
+}
+
+// Close modal on overlay click
+document.getElementById('cardModal').addEventListener('click', function(e) {
+    if (e.target === this) closeCard();
+});
+
+// Close popup using keyboard Esc key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('cardModal');
+        if (modal && modal.classList.contains('open')) {
+            closeCard();
+        }
+    }
+});
+
+
+</script>
+</body>
+</html>
