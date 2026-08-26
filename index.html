@@ -1586,9 +1586,13 @@ body.dark .guide-note-box {
     <!-- CAMERA DETAILS -->
     <div class="card">
         <div class="section-title">Camera Coverage</div>
-        <p><b>Total Camera Accessed:</b> <span id="totalCam" class="cam-badge cam-ok">0</span></p>
+        <p><b>Total Camera Accessed:</b> <span id="totalCam" class="cam-badge cam-ok">83</span></p>
+
         <p><b>NVR 1</b> <span class="cam-tag">Smart PSS</span></p>
         <div id="NVR1"></div>
+
+        <p style="margin-top:20px;"><b>NVR 2</b> <span class="cam-tag">Smart PSS</span></p>
+        <div id="NVR2"></div>
     </div>
 
     <!-- Restriction Rules -->
@@ -3160,6 +3164,10 @@ Captured Narration
 
 // Camera lists
 const NVR1  = Array.from({length:59}, (_,i) => i+1);
+const NVR2  = Array.from({length:24}, (_,i) => i+1);
+
+// NVR 1 Camera 56 is offline / highlighted red
+const NVR1_OFF = [56];
 
 // Render badges
 function render(id, list, offList=[]) {
@@ -3171,20 +3179,15 @@ function render(id, list, offList=[]) {
     document.getElementById(id).innerHTML = html;
 }
 
-// Total active cameras
+// Total camera access shown in the dashboard
 function updateTotal() {
-    const active =
-        (NVR1.length  - off.NVR1.length);
-    document.getElementById('totalCam').textContent = active;
-}
-
-function updateTotal() {
-    document.getElementById('totalCam').textContent = NVR1.length;
+    document.getElementById('totalCam').textContent = (NVR1.length - NVR1_OFF.length) + NVR2.length;
 }
 
 // Init on load
 document.addEventListener('DOMContentLoaded', () => {
-    render('NVR1',  NVR1,  NVR1.gnd);
+    render('NVR1', NVR1, NVR1_OFF);
+    render('NVR2', NVR2);
     updateTotal();
 });
 
@@ -3838,6 +3841,7 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
 
 </script>
 </body>
