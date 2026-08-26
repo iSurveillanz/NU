@@ -1586,13 +1586,9 @@ body.dark .guide-note-box {
     <!-- CAMERA DETAILS -->
     <div class="card">
         <div class="section-title">Camera Coverage</div>
-        <p><b>Total Camera Accessed:</b> <span id="totalCam" class="cam-badge cam-ok">82</span></p>
-
+        <p><b>Total Camera Accessed:</b> <span id="totalCam" class="cam-badge cam-ok">0</span></p>
         <p><b>NVR 1</b> <span class="cam-tag">Smart PSS</span></p>
         <div id="NVR1"></div>
-
-        <p><b>NVR 2</b> <span class="cam-tag">KVMS Pro Lite</span></p>
-        <div id="NVR2"></div>
     </div>
 
     <!-- Restriction Rules -->
@@ -2455,6 +2451,21 @@ Captured Narration
     <p>✔ Verify weapon visibility and alert Security Control Room immediately.</p>
 </div>
 
+<!-- 24 -->
+<div class="trigger-card">
+    <div class="trigger-number">25</div>
+    <div class="trigger-icon">📷⚠️</div>
+    <h4>CCTV Dark / Blind Spot</h4>
+    <div class="evidence-actions">
+                    <button type="button" class="view-example-btn" onclick="openCard(71)">View Example</button>
+                    <button class="view-example-btn" onclick="openMessageCard('CCTVDarkBlindSpot')">Copy Msg</button>
+                </div>
+
+            <hr>
+            
+    <p>✔ Verify weapon visibility and alert Security Control Room immediately.</p>
+</div>
+
 
         <!-- Continue remaining cards -->
 
@@ -3148,11 +3159,10 @@ Captured Narration
 <script>
 
 // Camera lists
-const NVR1 = Array.from({length: 59}, (_, i) => i + 1);
-const NVR2 = Array.from({length: 23}, (_, i) => i + 1);
+const NVR1  = Array.from({length:59}, (_,i) => i+1);
 
 // Render badges
-function render(id, list, offList = []) {
+function render(id, list, offList=[]) {
     let html = '';
     list.forEach(c => {
         const cls = offList.includes(c) ? 'cam-off' : 'cam-ok';
@@ -3163,14 +3173,18 @@ function render(id, list, offList = []) {
 
 // Total active cameras
 function updateTotal() {
-    const total = NVR1.length + NVR2.length;
-    document.getElementById('totalCam').textContent = total;
+    const active =
+        (NVR1.length  - off.NVR1.length);
+    document.getElementById('totalCam').textContent = active;
+}
+
+function updateTotal() {
+    document.getElementById('totalCam').textContent = NVR1.length;
 }
 
 // Init on load
 document.addEventListener('DOMContentLoaded', () => {
-    render('NVR1', NVR1);
-    render('NVR2', NVR2);
+    render('NVR1',  NVR1,  NVR1.gnd);
     updateTotal();
 });
 
@@ -3556,6 +3570,11 @@ function openCard(cardNumber) {
             image: 'images/Photo8.png',
             title: '',
             message: ''
+        },
+        71: {
+            image: 'images/NU34.png',
+            title: '📷⚠️ CCTV Dark / Blind Spot',
+            message: ''
         }
     };
 
@@ -3707,8 +3726,10 @@ const messageSets = {
     ],
     OpenDoorLoc: [
         { text: "Please check what they were doing (yellow pointer)", label: "AB: Abnormality" }
+    ],
+    CCTVDarkBlindSpot: [
+        { text: "1 person entered a CCTV blind spot (yellow pointer)", label: "NC: Blind Spot" }
     ]
-
 };
 
 function openMessageCard(setKey) {
